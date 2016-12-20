@@ -12,37 +12,43 @@ public class MaximumSumSubSequence
     private int maxSumSubSequence(int[] array)
     {
         int maxSum = array[0];
-        int[] sumTillIndex = new int[array.length];
-        sumTillIndex[0] = array[0];
+        //int[] sumTillIndex = new int[array.length];
+        int sumTillIndex = array[0];
         for (int i = 1; i < array.length; i++)
         {
-            sumTillIndex[i] = max(sumTillIndex[i - 1] + array[i], array[i]);
-            maxSum = maxSum > sumTillIndex[i] ? maxSum : sumTillIndex[i];
+          //  sumTillIndex[i] = max(sumTillIndex[i - 1] + array[i], array[i]);
+            sumTillIndex = max(sumTillIndex + array[i], array[i]);
+            maxSum = maxSum > sumTillIndex ? maxSum : sumTillIndex;
         }
         return maxSum;
     }
 
-    private SumResult maxSumSubSequenceResult(int[] array)
+    protected SumResult maxSumSubSequenceResult(int[] array)
     {
+        if(array == null || array.length == 0){
+            throw new IllegalArgumentException("array cannot be null or empty");
+        }
         SumResult result = new SumResult();
         int maxSum = array[0];
         result.setStartIndex(0);
         result.setEndIndex(0);
         result.setSum(maxSum);
-        int[] sumTillIndex = new int[array.length];
-        sumTillIndex[0] = array[0];
+        int sumTillIndex = array[0];
+        if(array.length == 1){
+            return result;
+        }
         for (int i = 1; i < array.length; i++)
         {
-            sumTillIndex[i] = max(sumTillIndex[i - 1] + array[i], array[i]);
-            if (sumTillIndex[i] == array[i])
+            sumTillIndex = max(sumTillIndex + array[i], array[i]);
+            maxSum = maxSum < sumTillIndex ? sumTillIndex : maxSum;
+            if (sumTillIndex == array[i])
             {
                 result.setStartIndex(i);
             }
-            else
+            else if(maxSum == sumTillIndex)
             {
                 result.setEndIndex(i);
             }
-            maxSum = maxSum < sumTillIndex[i] ? sumTillIndex[i] : maxSum;
             result.setSum(maxSum);
         }
         result.setEndIndex(result.getStartIndex() > result.getEndIndex() ? result.getStartIndex() : result.getEndIndex());
@@ -52,14 +58,6 @@ public class MaximumSumSubSequence
     int max(int a, int b)
     {
         return a > b ? a : b;
-    }
-
-    public static void main(String[] args)
-    {
-        int[] array = { 1, 2, -4, 5, -8, -3, 10, -1, 4, 6, -20, 50 };
-        MaximumSumSubSequence maxSum = new MaximumSumSubSequence();
-        System.out.println("Max sum=" + maxSum.maxSumSubSequenceResult(array));
-        System.out.println("Max sum=" + maxSum.maxSumSubSequenceResult(new int[] { -1, 4, 5, -8, 10, -8, 30 }));
     }
 }
 
@@ -103,5 +101,22 @@ class SumResult
     public String toString()
     {
         return "SumResult [startIndex=" + startIndex + ", endIndex=" + endIndex + ", sum=" + sum + "]";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof SumResult)) {
+            return false;
+        }
+        if(obj == this) {
+            return true;
+        }
+        SumResult thatResult = (SumResult) obj;
+        if(this.startIndex == thatResult.startIndex &&
+                this.endIndex == thatResult.endIndex &&
+                this.sum == thatResult.sum){
+            return true;
+        }
+        return false;
     }
 }

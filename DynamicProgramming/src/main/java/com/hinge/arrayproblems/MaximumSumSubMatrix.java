@@ -12,16 +12,16 @@ public class MaximumSumSubMatrix {
         MatrixResult matResult = new MatrixResult();
         MaximumSumSubSequence arrSubSeq = new MaximumSumSubSequence();
 
-        for (int left = 0; left < numCols; left++) {
-            for (int right = left; right < numCols; right++) {
+        for (int leftCol = 0; leftCol < numCols; leftCol++) {
+            for (int rightCol = leftCol; rightCol < numCols; rightCol++) {
                 for (int i = 0; i < numRows; i++) {
-                    array[i] = right == left ? matrix[i][right] : array[i] + matrix[i][right];
+                    array[i] = rightCol == leftCol ? matrix[i][rightCol] : array[i] + matrix[i][rightCol];
                 }
                 SumResult result = arrSubSeq.maxSumSubSequenceResult(array);
                 if (result.sum >= maxSum) {
                     maxSum = result.sum;
-                    matResult.setLeftIndex(left);
-                    matResult.setRightIndex(right);
+                    matResult.setLeftIndex(leftCol);
+                    matResult.setRightIndex(rightCol);
                     matResult.setUpIndex(result.startIndex);
                     matResult.setDownIndex(result.endIndex);
                     matResult.setSum(maxSum);

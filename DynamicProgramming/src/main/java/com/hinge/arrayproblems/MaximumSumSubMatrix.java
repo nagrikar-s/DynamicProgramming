@@ -6,18 +6,19 @@ package com.hinge.arrayproblems;
 public class MaximumSumSubMatrix {
     public MatrixResult maxSumSubMatrix(int[][] matrix) {
         int maxSum = matrix[0][0];
-        int colLen = matrix[0].length;
-        int[] array = new int[colLen];
+        int numRows = matrix.length;
+        int numCols = matrix[0].length;
+        int[] array = new int[numRows];
         MatrixResult matResult = new MatrixResult();
         MaximumSumSubSequence arrSubSeq = new MaximumSumSubSequence();
 
-        for (int left = 0; left < matrix.length; left++) {
-            for (int right = left; right < colLen; right++) {
-                for (int i = 0; i < colLen; i++) {
-                    array[i] = right == left ? matrix[right][i] : array[i] + matrix[right][i];
+        for (int left = 0; left < numCols; left++) {
+            for (int right = left; right < numCols; right++) {
+                for (int i = 0; i < numRows; i++) {
+                    array[i] = right == left ? matrix[i][right] : array[i] + matrix[i][right];
                 }
                 SumResult result = arrSubSeq.maxSumSubSequenceResult(array);
-                if (result.sum > maxSum) {
+                if (result.sum >= maxSum) {
                     maxSum = result.sum;
                     matResult.setLeftIndex(left);
                     matResult.setRightIndex(right);
@@ -43,7 +44,7 @@ class MatrixResult {
         return leftIndex;
     }
 
-    public void setLeftIndex(int LeftIndex) {
+    public void setLeftIndex(int leftIndex) {
         this.leftIndex = leftIndex;
     }
 
@@ -96,5 +97,16 @@ class MatrixResult {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "MatrixResult{" +
+                "leftIndex=" + leftIndex +
+                ", rightIndex=" + rightIndex +
+                ", upIndex=" + upIndex +
+                ", downIndex=" + downIndex +
+                ", sum=" + sum +
+                '}';
     }
 }
